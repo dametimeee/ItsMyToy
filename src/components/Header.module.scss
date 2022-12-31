@@ -1,0 +1,42 @@
+.header__wrapper {
+  width: 100vw;
+  height: 8vh;
+  background-color: #00d564;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .header__left {
+    display: flex;
+    margin-left: 10px;
+    .header__icon__bar {
+      margin-right: 20px;
+    }
+  }
+  .header__right {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-right: 10px;
+    .search__box {
+      position: relative;
+      input {
+        width: 268px;
+        height: 33px;
+        padding-left: 10px;
+      }
+      button {
+        position: absolute;
+        right: 9px;
+        top: 0;
+        bottom: 0;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .login__box {
+      margin-left: 18px;
+      margin-right: 9px;
+    }
+  }
+}

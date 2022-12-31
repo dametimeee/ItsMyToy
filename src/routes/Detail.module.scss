@@ -1,0 +1,39 @@
+body {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.wrapper {
+  margin-top: 70px;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.03);
+  padding: 50px;
+  .image {
+    width: 300px;
+    height: 300px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 13px 27px -5px rgba(50, 50, 93, 0.25),
+      0 8px 16px -8px rgba(0, 0, 0, 0.3), 0 -6px 16px -6px rgba(0, 0, 0, 0.025);
+  }
+
+  .info {
+    margin-left: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    .title {
+      padding-top: 50px;
+      padding-bottom: 10px;
+    }
+    .author {
+      padding-bottom: 10px;
+    }
+    .url {
+      padding-bottom: 10px;
+    }
+    .service {
+      padding-bottom: 10px;
+    }
+    .updateDays {
+    }
+  }
+}
