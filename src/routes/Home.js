@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Home.module.scss";
 import Header from "../components/Header";
 import Webtoon from "../components/Webtoon";
+import Loading from "../components/Loading";
 
 function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -59,7 +60,7 @@ function Home() {
   return (
     <div>
       {isLoading ? (
-        <div>Loading</div>
+        <Loading />
       ) : (
         <div>
           <Header />
