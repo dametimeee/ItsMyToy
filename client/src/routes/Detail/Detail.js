@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./Detail.module.scss";
-import Header from "../components/Header";
+import Header from "../../components/Header/Header";
 
 function Detail() {
   const [webtoon, setWebtoon] = useState([]);
@@ -14,6 +14,7 @@ function Detail() {
     ).json();
     setWebtoon(json.webtoons[0]);
   };
+
   useEffect(() => {
     getWebtoon();
   }, []);

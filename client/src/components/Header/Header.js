@@ -1,19 +1,26 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import style from "./Header.module.scss";
 import { faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Search } from "../routes/Search";
 import { Link } from "react-router-dom";
 
 function Header() {
   const [search, setSearch] = useState("");
+  const searchBtn = useRef();
 
-  const onSearchChange = (event) => {
+  const handleSearchChange = (event) => {
     const {
       target: { value },
     } = event;
     setSearch(value);
   };
+
+  const handleEnterKeyPress = (event) => {
+    if (event.key == "Enter") {
+      searchBtn.current.click();
+    }
+  };
+
   return (
     <div>
       <div className={style.header__wrapper}>
@@ -35,22 +42,29 @@ function Header() {
                 type="text"
                 name="search"
                 placeholder="제목 / 작가로 검색할 수 있습니다."
-                onChange={onSearchChange}
+                onChange={handleSearchChange}
+                onKeyDown={handleEnterKeyPress}
                 value={search}
               />
               <Link
                 to={{
-                  pathname: "/search",
+                  pathname: `/search/${encodeURI(encodeURIComponent(search))}`,
                   state: { search },
                 }}
               >
-                <button>
-                  <FontAwesomeIcon icon={faMagnifyingGlass} size={"1x"} />
-                </button>
+                <span ref={searchBtn}>
+                  <FontAwesomeIcon
+                    icon={faMagnifyingGlass}
+                    size={"1x"}
+                    style={{ fontSize: "15px" }}
+                  />
+                </span>
               </Link>
             </div>
           </div>
-          <div className={style.login__box}>로그인</div>
+          <Link to={"/Join"} style={{ textDecoration: "none" }}>
+            <div className={style.login__box}>로그인</div>
+          </Link>
         </div>
       </div>
     </div>

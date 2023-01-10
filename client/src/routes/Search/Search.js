@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./Search.module.scss";
-import Header from "../components/Header";
-import Webtoon from "../components/Webtoon";
+import Header from "../../components/Header/Header";
+import Webtoon from "../../components/Webtoon/Webtoon";
 
 const Search = (props) => {
   const [searchWebtoon, setSearchWebtoon] = useState([]);
@@ -13,7 +13,6 @@ const Search = (props) => {
         `https://korea-webtoon-api.herokuapp.com/search?keyword=${search})}`
       )
     ).json();
-    console.log(json.webtoons);
     setSearchWebtoon(json.webtoons);
   };
 
