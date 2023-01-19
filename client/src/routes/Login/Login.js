@@ -1,16 +1,18 @@
-import styles from "./Join.module.scss";
+import styles from "./Login.module.scss";
 import Header from "../../components/Header/Header";
 import axios from "axios";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { userState, loginState } from "../../recoil";
 
-function Join() {
+function Login() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [status, setStatus] = useState("");
+  const [user, setUser] = useRecoilState(userState);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
+
   const history = useHistory();
 
   function handleUseHistory() {
@@ -27,42 +29,27 @@ function Join() {
     setPassword(e.target.value);
   };
 
-  const handlePassword2 = (e) => {
-    e.preventDefault();
-    setPassword2(e.target.value);
-  };
-
-  const handleUsername = (e) => {
-    e.preventDefault();
-    setUsername(e.target.value);
-  };
-
-  const handleEmail = (e) => {
-    e.preventDefault();
-    setEmail(e.target.value);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     let body = {
       id: id,
       password: password,
-      password2: password2,
-      username: username,
-      email: email,
     };
     axios
-      .post("/api/users/join", body, {
+      .post("/api/users/login", body, {
         header: {
           "Content-Type": "application/json",
         },
       })
       .then((res) => {
-        if (res.data === "complete") {
+        if (res.data.loggedIn) {
+          setUser(res.data.user);
+          setIsLogin(true);
           handleUseHistory();
+        } else {
+          setStatus(res.data);
         }
-        setStatus(res.data);
       });
   };
 
@@ -95,36 +82,22 @@ function Join() {
             onChange={handlePassword}
           ></input>
           <input
-            className={styles.content}
-            placeholder="비밀번호 재확인"
-            name="password2"
-            type="password"
-            required
-            onChange={handlePassword2}
-          ></input>
-          <input
-            className={styles.content}
-            placeholder="이름"
-            name="name"
-            type="text"
-            required
-            onChange={handleUsername}
-          ></input>
-          <input
-            className={styles.content}
-            placeholder="이메일"
-            name="email"
-            type="email"
-            required
-            onChange={handleEmail}
-          ></input>
-          <input
             className={`${styles.content} ${styles.content__submit}`}
-            placeholder="회원가입"
+            placeholder="로그인"
             name="submit"
             type="submit"
             required
           ></input>
+          <div className={styles.bottom}>
+            <div className={styles.bottom__left}>
+              <span>아이디 찾기</span>
+              <span> / </span>
+              <span>비밀번호 찾기</span>
+            </div>
+            <Link to="/Join">
+              <div className={styles.bottom__right}>회원가입</div>
+            </Link>
+          </div>
           <div className={styles.status} onChange={handleStatusChange}>
             {status}
           </div>
@@ -134,4 +107,4 @@ function Join() {
   );
 }
 
-export default Join;
+export default Login;

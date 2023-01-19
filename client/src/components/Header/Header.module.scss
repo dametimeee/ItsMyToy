@@ -9,6 +9,12 @@
   .header__left {
     display: flex;
     margin-left: 10px;
+    .header__title {
+      text-decoration: none;
+      &:hover {
+        cursor: pointer;
+      }
+    }
     .header__icon__bar {
       margin-right: 20px;
     }
@@ -17,13 +23,13 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-right: 10px;
     .search__box {
       position: relative;
+      margin-right: 20px;
       input {
-        width: 268px;
+        width: 240px;
         height: 33px;
-        padding-left: 15px;
+        padding-left: 14px;
         border: 1px solid #797979;
       }
       span {
@@ -37,9 +43,20 @@
         }
       }
     }
-    .login__box {
-      margin-left: 18px;
-      margin-right: 9px;
+    .loginBox {
+      display: flex;
+      align-items: center;
+      margin-left: 10px;
+      &:hover {
+        cursor: pointer;
+      }
+      .loginBox__image {
+        font-size: 25px;
+        margin-right: 30px;
+      }
+      // .loginBox__username {
+      //   font-size: 13px;
+      // }
     }
   }
 }

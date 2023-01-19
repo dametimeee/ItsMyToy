@@ -41,5 +41,11 @@
     .status {
       color: black;
     }
+    .bottom {
+      display: flex;
+      justify-content: space-between;
+      color: black;
+      font-size: 9px;
+    }
   }
 }

@@ -20,6 +20,7 @@ function Home() {
         `https://korea-webtoon-api.herokuapp.com/?perPage=3000&service=naver`
       )
     ).json();
+
     for (let webtoon of json.webtoons) {
       if (webtoon.updateDays[0] === "mon") {
         monWebtoon.push(webtoon);
@@ -37,7 +38,6 @@ function Home() {
         sunWebtoon.push(webtoon);
       }
     }
-
     setIsLoading(false);
   };
 

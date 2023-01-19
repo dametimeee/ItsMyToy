@@ -1,0 +1,16 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  margin-top: 15vh;
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .image {
+      font-size: 100px;
+      margin-bottom: 60px;
+    }
+  }
+}
