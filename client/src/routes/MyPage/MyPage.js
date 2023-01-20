@@ -8,19 +8,41 @@ import { userState, loginState } from "../../recoil";
 
 function MyPage() {
   const [user, setUser] = useRecoilState(userState);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
+
+  const history = useHistory();
+
+  function handleUseHistory() {
+    history.push("/");
+  }
+  const handleLogoutClick = async () => {
+    await axios.post("/api/users/logout", { withCredentials: true });
+    setUser(null);
+    setIsLogin(false);
+    handleUseHistory();
+  };
 
   return (
     <div>
-      <Header></Header>
-      <div className={styles.wrapper}>
-        <div className={styles.profile}>
-          <div className={styles.image}>😄</div>
-          <div>
-            <span className={styles.content}>{user.username}</span>
-            <span className={styles.content}>설정</span>
+      {isLogin ? (
+        <div>
+          <Header></Header>
+          <div className={styles.wrapper}>
+            <div className={styles.profile}>
+              <div className={styles.image}>😄</div>
+              <div>
+                <span className={styles.content}>{user.username}</span>
+                <span className={styles.content}>설정</span>
+                <span className={styles.logout} onClick={handleLogoutClick}>
+                  로그아웃
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div>로그인을 해주세요.</div>
+      )}
     </div>
   );
 }
