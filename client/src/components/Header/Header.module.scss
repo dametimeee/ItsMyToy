@@ -23,8 +23,15 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
+    margin-right: 30px;
+    .logo {
+      width: 24px;
+      height: 4vh;
+      cursor: pointer;
+    }
     .search__box {
       position: relative;
+      margin-left: 7px;
       margin-right: 20px;
       input {
         width: 240px;

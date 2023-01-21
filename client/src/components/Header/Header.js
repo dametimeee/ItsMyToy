@@ -2,8 +2,8 @@ import { useState, useRef } from "react";
 import style from "./Header.module.scss";
 import { faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
-import { userState, loginState } from "../../recoil";
+import { Link, useHistory } from "react-router-dom";
+import { userState, loginState, isNaverState } from "../../recoil";
 import { useRecoilState } from "recoil";
 import axios from "axios";
 
@@ -12,6 +12,7 @@ function Header() {
   const searchBtn = useRef();
   const [user, setUser] = useRecoilState(userState);
   const [isLogin, setIsLogin] = useRecoilState(loginState);
+  const [isNaver, setIsNaver] = useRecoilState(isNaverState);
 
   const handleSearchChange = (event) => {
     const {
@@ -30,10 +31,16 @@ function Header() {
     await axios.post("/api/users/logout", { withCredentials: true });
     setUser(null);
     setIsLogin(false);
-    return;
   };
 
-  const handleProfileClick = () => {};
+  const naverLogoClick = () => {
+    setIsNaver(true);
+  };
+
+  const kakaoLogoClick = () => {
+    setIsNaver(false);
+  };
+
   return (
     <div>
       <div className={style.header__wrapper}>
@@ -50,6 +57,16 @@ function Header() {
           </Link>
         </div>
         <div className={style.header__right}>
+          <img
+            className={`${style.logo} ${style.kakao__logo}`}
+            src="https://i1.wp.com/wowtale.net/wp-content/uploads/2022/02/wowtale.net---1-1.jpg?zoom=2&fit=300%2C300&ssl=1"
+            onClick={naverLogoClick}
+          ></img>
+          <img
+            className={`${style.logo} ${style.naver__logo}`}
+            src="https://play-lh.googleusercontent.com/41iW640PxKoS880AfgX55EQrzI7jO-SEkUt8tK-KUJrSn2f1784QoJZ8WSRpGmMsGcU"
+            onClick={kakaoLogoClick}
+          ></img>
           <div>
             <div className={style.search__box}>
               <input
@@ -90,7 +107,7 @@ function Header() {
               </div>
               {/* <div className={style.loginBox} onClick={handleLogoutClick}>
                 로그아웃
-              </div> */}
+              </div>  */}
             </div>
           ) : (
             <Link to={"/Login"} style={{ textDecoration: "none" }}>
