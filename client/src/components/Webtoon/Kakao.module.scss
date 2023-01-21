@@ -1,0 +1,27 @@
+.home__wrapper {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .contents {
+    border: solid 1px #eaeaea;
+    border-right: none;
+    display: flex;
+    .content {
+      border-right: solid 1px #eaeaea;
+      padding: 10px;
+      .day {
+        color: #9f9f9f;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+        font-size: 13px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.content__mon {
+  border-left: none;
+}
