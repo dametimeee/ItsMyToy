@@ -1,0 +1,24 @@
+.wrapper {
+  position: relative;
+  .profile {
+    width: 80px;
+    position: absolute;
+    display: flex;
+    padding: 13px;
+    border: 1px solid black;
+    border-radius: 15px;
+    font-size: 18px;
+    top: 5vh;
+    right: 3vw;
+    justify-content: center;
+    line-height: 1.4rem;
+    .profile__text {
+      font-size: 14px;
+      .logout {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

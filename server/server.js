@@ -4,7 +4,6 @@ import morgan from "morgan";
 import MongoStore from "connect-mongo";
 import cors from "cors";
 import userRouter from "./Router/userRouter.js";
-import rootRouter from "./Router/rootRouter.js";
 import User from "./models/User.js";
 import mongoose from "mongoose";
 

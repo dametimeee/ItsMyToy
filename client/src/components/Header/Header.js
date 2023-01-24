@@ -6,6 +6,8 @@ import { Link, useHistory } from "react-router-dom";
 import { userState, loginState, isNaverState } from "../../recoil";
 import { useRecoilState } from "recoil";
 import axios from "axios";
+import Profile from "../Profile/Profile";
+import Sidebar from "../Sidebar/Sidebar";
 
 function Header() {
   const [search, setSearch] = useState("");
@@ -13,6 +15,8 @@ function Header() {
   const [user, setUser] = useRecoilState(userState);
   const [isLogin, setIsLogin] = useRecoilState(loginState);
   const [isNaver, setIsNaver] = useRecoilState(isNaverState);
+  const [profile, setProfile] = useState(false);
+  const [sidebar, setSidebar] = useState(false);
 
   const handleSearchChange = (event) => {
     const {
@@ -27,18 +31,20 @@ function Header() {
     }
   };
 
-  const handleLogoutClick = async () => {
-    await axios.post("/api/users/logout", { withCredentials: true });
-    setUser(null);
-    setIsLogin(false);
-  };
-
-  const naverLogoClick = () => {
+  const handleNaverLogoClick = () => {
     setIsNaver(true);
   };
 
-  const kakaoLogoClick = () => {
+  const handleKakaoLogiClick = () => {
     setIsNaver(false);
+  };
+
+  const handleProfileClick = () => {
+    setProfile((prev) => !prev);
+  };
+
+  const handleSearchClick = () => {
+    setSidebar((prev) => !prev);
   };
 
   return (
@@ -50,8 +56,10 @@ function Header() {
               icon={faBars}
               size={"xl"}
               className={style.header__icon__bar}
+              onClick={handleSearchClick}
             />
           </div>
+          {sidebar ? <Sidebar /> : <></>}
           <Link to="/" style={{ textDecoration: "none" }}>
             <div className={style.header__title}>ThisIsTitle</div>
           </Link>
@@ -60,12 +68,12 @@ function Header() {
           <img
             className={`${style.logo} ${style.kakao__logo}`}
             src="https://i1.wp.com/wowtale.net/wp-content/uploads/2022/02/wowtale.net---1-1.jpg?zoom=2&fit=300%2C300&ssl=1"
-            onClick={naverLogoClick}
+            onClick={handleNaverLogoClick}
           ></img>
           <img
             className={`${style.logo} ${style.naver__logo}`}
             src="https://play-lh.googleusercontent.com/41iW640PxKoS880AfgX55EQrzI7jO-SEkUt8tK-KUJrSn2f1784QoJZ8WSRpGmMsGcU"
-            onClick={kakaoLogoClick}
+            onClick={handleKakaoLogiClick}
           ></img>
           <div>
             <div className={style.search__box}>
@@ -98,9 +106,14 @@ function Header() {
           {isLogin ? (
             <div>
               <div className={style.loginBox}>
-                <Link to={"/MyPage"} style={{ textDecoration: "none" }}>
-                  <span className={style.loginBox__image}>😄</span>
-                </Link>
+                <div
+                  className={style.loginBox__image}
+                  onClick={handleProfileClick}
+                >
+                  😄
+                </div>
+                {profile ? <Profile /> : <div></div>}
+
                 {/* <span className={style.loginBox__username}>
                   {user.username}
                 </span> */}

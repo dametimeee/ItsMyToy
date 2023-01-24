@@ -8,7 +8,7 @@
   border-bottom: 1px solid #ededed;
   .header__left {
     display: flex;
-    margin-left: 10px;
+    margin-left: 1.5vw;
     .header__title {
       text-decoration: none;
       &:hover {
@@ -17,16 +17,18 @@
     }
     .header__icon__bar {
       margin-right: 20px;
+      cursor: pointer;
     }
   }
   .header__right {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-right: 30px;
+    margin-right: 1.5vw;
+
     .logo {
       width: 24px;
-      height: 4vh;
+      height: 3vh;
       cursor: pointer;
     }
     .search__box {
