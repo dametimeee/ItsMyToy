@@ -38,6 +38,21 @@
         cursor: pointer;
       }
     }
+    .socialLogin {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 200px;
+      height: 100px;
+      cursor: pointer;
+      .naverLogin {
+        background-color: #17ce5f;
+      }
+      .kakaoLogin {
+        background-color: #fee501;
+      }
+    }
     .status {
       color: black;
     }

@@ -12,6 +12,7 @@ function Login() {
   const [status, setStatus] = useState("");
   const [user, setUser] = useRecoilState(userState);
   const [isLogin, setIsLogin] = useRecoilState(loginState);
+  let naverUrl = "";
 
   const history = useHistory();
 
@@ -37,11 +38,16 @@ function Login() {
       password: password,
     };
     axios
-      .post("/api/users/login", body, {
-        header: {
-          "Content-Type": "application/json",
-        },
-      })
+      .post(
+        "/api/users/login",
+        body,
+        { withCredentials: true },
+        {
+          header: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then((res) => {
         if (res.data.loggedIn) {
           setUser(res.data.user);
@@ -55,6 +61,12 @@ function Login() {
 
   const handleStatusChange = (e) => {
     setStatus(e.target.value);
+  };
+
+  const handleNaverClick = async (req, res) => {
+    await axios
+      .get("/api/users/naver/start", { withCredentials: true })
+      .then((res) => (window.location.href = res.data));
   };
 
   return (
@@ -88,6 +100,12 @@ function Login() {
             type="submit"
             required
           ></input>
+          <div className={styles.socialLogin}>
+            <div className={styles.naverLogin} onClick={handleNaverClick}>
+              네이버 로그인
+            </div>
+            <div className={styles.kakaoLogin}>카카오 로그인</div>
+          </div>
           <div className={styles.bottom}>
             <div className={styles.bottom__left}>
               <span>아이디 찾기</span>
