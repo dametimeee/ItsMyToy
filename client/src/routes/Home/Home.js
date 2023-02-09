@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import styles from "./Home.module.scss";
-import Header from "../../components/Header/Header";
-import Webtoon from "../../components/Webtoon/Webtoon";
+import { useHistory } from "react-router-dom";
+
 import Loading from "../../components/Loading/Loading";
 import axios from "axios";
 import {
   userState,
   loginState,
   isNaverState,
-  webtoonState,
+  naverLoginState,
 } from "../../recoil";
 import { useRecoilState } from "recoil";
 import Naver from "../../components/Webtoon/Naver";
@@ -19,6 +18,16 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [kakaoWebtoons, setKakaoWebtoons] = useState([]);
   const [naverWebtoons, setNaverWebtoons] = useState([]);
+  const [status, setStatus] = useState("");
+  const [user, setUser] = useRecoilState(userState);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
+  const [naverLogin, setNaverLogin] = useRecoilState(naverLoginState);
+
+  const history = useHistory();
+
+  function handleUseHistory() {
+    history.push("/");
+  }
 
   const getWebtoons = async () => {
     const json = await (
@@ -35,8 +44,23 @@ function Home() {
     setIsLoading(false);
   };
 
+  const isLoginCheck = async (req, res) => {
+    axios
+      .get("/api/users/naver/data", { withCredentials: true })
+      .then((res) => {
+        if (res.data.loggedIn) {
+          setUser(res.data.user);
+          setIsLogin(true);
+          handleUseHistory();
+        } else {
+          return;
+        }
+      });
+  };
+
   useEffect(() => {
     getWebtoons();
+    isLoginCheck();
   }, []);
 
   return (

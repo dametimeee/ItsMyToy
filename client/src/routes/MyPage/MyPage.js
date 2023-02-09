@@ -1,7 +1,7 @@
 import styles from "./MyPage.module.scss";
 import Header from "../../components/Header/Header";
+import Home from "../Home/Home";
 import axios from "axios";
-import { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userState, loginState } from "../../recoil";
@@ -9,19 +9,15 @@ import { userState, loginState } from "../../recoil";
 function MyPage() {
   const [user, setUser] = useRecoilState(userState);
   const [isLogin, setIsLogin] = useRecoilState(loginState);
-
   const history = useHistory();
 
-  function handleUseHistory() {
-    history.push("/");
-  }
-  const handleLogoutClick = async () => {
-    await axios.post("/api/users/logout", { withCredentials: true });
+  const handleLogoutClick = (req, res) => {
+    axios.get("/api/users/logout", { withCredentials: true }).then((res) => {
+      history.push(res.data);
+    });
     setUser(null);
     setIsLogin(false);
-    handleUseHistory();
   };
-
   return (
     <div>
       {isLogin ? (
@@ -41,7 +37,7 @@ function MyPage() {
           </div>
         </div>
       ) : (
-        <div>로그인을 해주세요.</div>
+        <div></div>
       )}
     </div>
   );

@@ -21,6 +21,12 @@ export const isNaverState = atom({
   effects_UNSTABLE: [persistAtom],
 });
 
+export const naverLoginState = atom({
+  key: "naverLoginState",
+  default: false,
+  effects_UNSTABLE: [persistAtom],
+});
+
 // export const webtoonState = atom({
 //   key: "webtoonState",
 //   default: fetch(`https://korea-webtoon-api.herokuapp.com/?perPage=3000`),
