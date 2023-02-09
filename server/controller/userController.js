@@ -1,5 +1,24 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+
+dotenv.config({ path: "../.env" });
+
+const client_id = process.env.NV_CLIENT;
+const client_secret = process.env.NV_SECRET;
+const state = process.env.NV_STATE;
+const redirect_uri = encodeURI(process.env.NV_REDIRECT_URI);
+
+console.log(client_id);
+
+let naverUser = null;
+
+export const getNaverData = (req, res) => {
+  if (naverUser == null) {
+    return res.send(null);
+  }
+  return res.send(naverUser);
+};
 
 export const postJoin = async (req, res) => {
   const { id, password, password2, username, email } = req.body;
@@ -45,10 +64,78 @@ export const postLogin = async (req, res) => {
   res.send(req.session);
 };
 
+export const startNaverLogin = (req, res) => {
+  const baseUrl = "https://nid.naver.com/oauth2.0/authorize";
+  const config = {
+    response_type: "code",
+    client_id,
+    redirect_uri,
+    state,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.redirect(finalUrl);
+};
+
+export const finishNaverLogin = async (req, res) => {
+  const baseUrl = "https://nid.naver.com/oauth2.0/token";
+  const config = {
+    grant_type: "authorization_code",
+    client_id,
+    client_secret,
+    code: req.query.code,
+    state: req.query.state,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  const tokenRequset = await (
+    await fetch(finalUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/html;charset=utf-8",
+      },
+    })
+  ).json();
+  if ("access_token" in tokenRequset) {
+    const { access_token } = tokenRequset;
+    const apiUrl = "https://openapi.naver.com";
+    const userData = await (
+      await fetch(`${apiUrl}/v1/nid/me`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/html;charset=utf-8",
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+    ).json();
+    let user = await User.findOne({ email: userData.response.email });
+    if (!user) {
+      user = await User.create({
+        avatarUrl: userData.response.profile_image,
+        name: userData.response.name,
+        username: userData.response.nickname,
+        email: userData.response.email,
+        password: "",
+        socialOnly: true,
+        location: "",
+      });
+    }
+    req.session.sessionId = req.session.id;
+    req.session.loggedIn = true;
+    req.session.user = user;
+    naverUser = req.session;
+    return res.redirect("/");
+  } else {
+    return res.redirect("/login");
+  }
+};
+
 export const getLogout = async (req, res) => {
   try {
+    naverUser = null;
+    req.session.loggedIn = false;
     req.session.destroy();
-    res.sendStatus(200);
+    return res.send("/");
   } catch (error) {
     res.status(400).json({ message: "there was some error", error });
   }
