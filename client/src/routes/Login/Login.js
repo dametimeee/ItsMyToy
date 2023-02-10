@@ -69,6 +69,12 @@ function Login() {
       .then((res) => (window.location.href = res.data));
   };
 
+  const handleKakaoClick = async (req, res) => {
+    await axios
+      .get("/api/users/kakao/start", { withCredentials: true })
+      .then((res) => (window.location.href = res.data));
+  };
+
   return (
     <div>
       <Header />
@@ -104,7 +110,9 @@ function Login() {
             <div className={styles.naverLogin} onClick={handleNaverClick}>
               네이버 로그인
             </div>
-            <div className={styles.kakaoLogin}>카카오 로그인</div>
+            <div className={styles.kakaoLogin} onClick={handleKakaoClick}>
+              카카오 로그인
+            </div>
           </div>
           <div className={styles.bottom}>
             <div className={styles.bottom__left}>

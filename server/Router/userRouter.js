@@ -5,7 +5,10 @@ import {
   getLogout,
   startNaverLogin,
   finishNaverLogin,
+  startKakaoLogin,
+  finishKakaoLogin,
   getNaverData,
+  getKakaoData,
 } from "../controller/userController.js";
 
 const userRouter = express.Router();
@@ -15,6 +18,9 @@ userRouter.post("/login", postLogin);
 userRouter.get("/logout", getLogout);
 userRouter.get("/naver/start", startNaverLogin);
 userRouter.get("/naver/finish", finishNaverLogin);
+userRouter.get("/kakao/start", startKakaoLogin);
+userRouter.get("/kakao/finish", finishKakaoLogin);
 userRouter.get("/naver/data", getNaverData);
+userRouter.get("/kakao/data", getKakaoData);
 
 export default userRouter;

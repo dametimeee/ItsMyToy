@@ -44,7 +44,7 @@ function Home() {
     setIsLoading(false);
   };
 
-  const isLoginCheck = async (req, res) => {
+  const isNaverLoginCheck = async (req, res) => {
     axios
       .get("/api/users/naver/data", { withCredentials: true })
       .then((res) => {
@@ -58,9 +58,24 @@ function Home() {
       });
   };
 
+  const isKakaoLoginCheck = async (req, res) => {
+    axios
+      .get("/api/users/kakao/data", { withCredentials: true })
+      .then((res) => {
+        if (res.data.loggedIn) {
+          setUser(res.data.user);
+          setIsLogin(true);
+          handleUseHistory();
+        } else {
+          return;
+        }
+      });
+  };
+
   useEffect(() => {
     getWebtoons();
-    isLoginCheck();
+    isNaverLoginCheck();
+    isKakaoLoginCheck();
   }, []);
 
   return (

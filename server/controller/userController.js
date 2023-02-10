@@ -4,20 +4,21 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: "../.env" });
 
-const client_id = process.env.NV_CLIENT;
-const client_secret = process.env.NV_SECRET;
-const state = process.env.NV_STATE;
-const redirect_uri = encodeURI(process.env.NV_REDIRECT_URI);
-
-console.log(client_id);
-
 let naverUser = null;
+let kakaoUser = null;
 
 export const getNaverData = (req, res) => {
   if (naverUser == null) {
     return res.send(null);
   }
   return res.send(naverUser);
+};
+
+export const getKakaoData = (req, res) => {
+  if (kakaoUser == null) {
+    return res.send(null);
+  }
+  return res.send(kakaoUser);
 };
 
 export const postJoin = async (req, res) => {
@@ -68,9 +69,9 @@ export const startNaverLogin = (req, res) => {
   const baseUrl = "https://nid.naver.com/oauth2.0/authorize";
   const config = {
     response_type: "code",
-    client_id,
-    redirect_uri,
-    state,
+    client_id: process.env.NV_CLIENT,
+    redirect_uri: process.env.NV_REDIRECT_URI,
+    state: process.env.NV_STATE,
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
@@ -81,8 +82,8 @@ export const finishNaverLogin = async (req, res) => {
   const baseUrl = "https://nid.naver.com/oauth2.0/token";
   const config = {
     grant_type: "authorization_code",
-    client_id,
-    client_secret,
+    client_id: process.env.NV_CLIENT,
+    client_secret: process.env.NV_SECRET,
     code: req.query.code,
     state: req.query.state,
   };
@@ -111,13 +112,72 @@ export const finishNaverLogin = async (req, res) => {
     let user = await User.findOne({ email: userData.response.email });
     if (!user) {
       user = await User.create({
-        avatarUrl: userData.response.profile_image,
         name: userData.response.name,
         username: userData.response.nickname,
         email: userData.response.email,
         password: "",
-        socialOnly: true,
-        location: "",
+      });
+    }
+    req.session.sessionId = req.session.id;
+    req.session.loggedIn = true;
+    req.session.user = user;
+    naverUser = req.session;
+    return res.redirect("/");
+  } else {
+    return res.redirect("/login");
+  }
+};
+
+export const startKakaoLogin = (req, res) => {
+  const baseUrl = "https://kauth.kakao.com/oauth/authorize";
+  const config = {
+    client_id: process.env.KK_CLIENT,
+    redirect_uri: process.env.KK_REDIRECT_URI,
+    response_type: "code",
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  return res.send(finalUrl);
+};
+
+export const finishKakaoLogin = async (req, res) => {
+  const baseUrl = "https://kauth.kakao.com/oauth/token";
+  const config = {
+    client_id: process.env.KK_CLIENT,
+    redirect_uri: process.env.KK_REDIRECT_URI,
+    grant_type: "authorization_code",
+    code: req.query.code,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${params}`;
+  const tokenRequset = await (
+    await fetch(finalUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+  ).json();
+  if ("access_token" in tokenRequset) {
+    const { access_token } = tokenRequset;
+    const apiUrl = "https://kapi.kakao.com";
+    const userData = await (
+      await fetch(`${apiUrl}/v2/user/me`, {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${access_token}`,
+        },
+      })
+    ).json();
+
+    let user = await User.findOne({ email: userData.kakao_account.email });
+    if (!user) {
+      user = await User.create({
+        name: userData.kakao_account.profile.nickname,
+        username: userData.kakao_account.profile.nickname,
+        email: userData.kakao_account.email,
+        password: "",
       });
     }
     req.session.sessionId = req.session.id;
