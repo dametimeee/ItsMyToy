@@ -16,8 +16,8 @@ function Sidebar() {
           }}
           items={[
             {
-              title: "Dashboard",
-              itemId: "/dashboard",
+              title: "자유게시판",
+              itemId: "/freeboard",
               // you can use your own custom Icon component as well
               // icon is optional
               elemBefore: () => <Icon name="inbox" />,
