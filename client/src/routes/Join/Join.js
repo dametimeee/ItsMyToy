@@ -1,7 +1,7 @@
 import styles from "./Join.module.scss";
 import Header from "../../components/Header/Header";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useHistory } from "react-router-dom";
 
 function Join() {
@@ -12,6 +12,8 @@ function Join() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("");
   const history = useHistory();
+  const [reAuthNum, setReAuthNum] = useState(null);
+  const [isAuthNum, setIsAuthNum] = useState(false);
 
   function handleUseHistory() {
     history.push("/");
@@ -42,28 +44,88 @@ function Join() {
     setEmail(e.target.value);
   };
 
+  const handleReAuthNum = (e) => {
+    e.preventDefault();
+    setReAuthNum(e.target.value);
+  };
+
+  const handleEmailCheck = async (e) => {
+    if (!email) {
+      window.alert("이메일을 입력해주세요.");
+    } else {
+      let body = {
+        email: email,
+      };
+      axios.post(
+        "/api/users/email",
+        body,
+        { withCredentials: true },
+        {
+          header: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+  };
+
+  const handleAuthNumCheck = () => {
+    if (!reAuthNum) {
+      window.alert("인증번호를 입력해주세요.");
+    } else {
+      let body = {
+        reAuthNum,
+      };
+      axios
+        .post(
+          "/api/users/email/check",
+          body,
+          { withCredentials: true },
+          {
+            header: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          if (res.data == true) {
+            setIsAuthNum(true);
+          }
+        });
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    let body = {
-      id: id,
-      password: password,
-      password2: password2,
-      username: username,
-      email: email,
-    };
-    axios
-      .post("/api/users/join", body, {
-        header: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        if (res.data === "complete") {
-          handleUseHistory();
-        }
-        setStatus(res.data);
-      });
+    if (isAuthNum) {
+      let body = {
+        id: id,
+        password: password,
+        password2: password2,
+        username: username,
+        email: email,
+      };
+      axios
+        .post(
+          "/api/users/join",
+          body,
+          { withCredentials: true },
+          {
+            header: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data === "complete") {
+            handleUseHistory();
+          }
+          setStatus(res.data);
+        });
+    } else {
+      window.alert("이메일을 인증해주세요.");
+    }
   };
 
   const handleStatusChange = (e) => {
@@ -74,7 +136,7 @@ function Join() {
     <div>
       <Header />
       <div className={styles.wrapper}>
-        <div className={styles.title}>ThisIsTitle</div>
+        <div className={styles.title}>Ibagu</div>
         <form className={styles.form} onSubmit={handleSubmit}>
           <div>
             <input
@@ -110,20 +172,49 @@ function Join() {
             required
             onChange={handleUsername}
           ></input>
-          <input
-            className={styles.content}
-            placeholder="이메일"
-            name="email"
-            type="email"
-            required
-            onChange={handleEmail}
-          ></input>
+
+          <div className={`${styles.emailWrapper} `}>
+            <input
+              className={styles.email}
+              placeholder="이메일"
+              name="email"
+              type="email"
+              required
+              onChange={handleEmail}
+            ></input>
+
+            <div className={styles.emailCheckBtn} onClick={handleEmailCheck}>
+              인증번호받기
+            </div>
+          </div>
+
+          <div className={`${styles.emailWrapper} `}>
+            <input
+              className={styles.content}
+              placeholder="인증번호 6자리"
+              required
+              onChange={handleReAuthNum}
+            ></input>
+
+            <div>
+              {isAuthNum ? (
+                <div className={styles.emailCheckBtn}>✅</div>
+              ) : (
+                <div
+                  className={styles.emailCheckBtn}
+                  onClick={handleAuthNumCheck}
+                >
+                  인증
+                </div>
+              )}
+            </div>
+          </div>
+
           <input
             className={`${styles.content} ${styles.content__submit}`}
-            placeholder="회원가입"
+            value="회원가입"
             name="submit"
             type="submit"
-            required
           ></input>
           <div className={styles.status} onChange={handleStatusChange}>
             {status}

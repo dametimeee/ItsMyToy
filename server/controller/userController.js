@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import sendEmail from "./email.js";
 import bcrypt from "bcrypt";
 import dotenv from "dotenv";
 
@@ -6,6 +7,16 @@ dotenv.config({ path: "../.env" });
 
 let naverUser = null;
 let kakaoUser = null;
+
+let authNum = null;
+
+const generateRandomNum = () => {
+  let str = "";
+  for (let i = 0; i < 6; i++) {
+    str += Math.floor(Math.random() * 10);
+  }
+  return str;
+};
 
 export const getNaverData = (req, res) => {
   if (naverUser == null) {
@@ -42,6 +53,8 @@ export const postJoin = async (req, res) => {
       password2,
       email,
       username,
+      profileImage:
+        "https://ssl.pstatic.net/static.post/image/im/img_default.gif",
     });
     res.send("complete");
   } catch {
@@ -75,7 +88,7 @@ export const startNaverLogin = (req, res) => {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
-  return res.redirect(finalUrl);
+  return res.send(finalUrl);
 };
 
 export const finishNaverLogin = async (req, res) => {
@@ -116,6 +129,8 @@ export const finishNaverLogin = async (req, res) => {
         username: userData.response.nickname,
         email: userData.response.email,
         password: "",
+        profileImage:
+          "https://ssl.pstatic.net/static.post/image/im/img_default.gif",
       });
     }
     req.session.sessionId = req.session.id;
@@ -178,6 +193,8 @@ export const finishKakaoLogin = async (req, res) => {
         username: userData.kakao_account.profile.nickname,
         email: userData.kakao_account.email,
         password: "",
+        profileImage:
+          "https://ssl.pstatic.net/static.post/image/im/img_default.gif",
       });
     }
     req.session.sessionId = req.session.id;
@@ -198,5 +215,19 @@ export const getLogout = async (req, res) => {
     return res.send("/");
   } catch (error) {
     res.status(400).json({ message: "there was some error", error });
+  }
+};
+
+export const getSendEmail = async (req, res) => {
+  authNum = generateRandomNum();
+  sendEmail(authNum);
+};
+
+export const checkAuthNum = (req, res) => {
+  console.log(req.body);
+  if (req.body.reAuthNum == authNum) {
+    res.send(true);
+  } else {
+    res.send(false);
   }
 };

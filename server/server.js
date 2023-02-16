@@ -5,6 +5,7 @@ import userRouter from "./Router/userRouter.js";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import bodyParser from "body-parser";
 
 const app = express();
 const db = mongoose.connection;
@@ -39,6 +40,9 @@ app.use(
     cookie: { maxAge: 3.6e6 * 24 },
   })
 );
+
+app.use(bodyParser.json());
+
 app.use("/api/users", userRouter);
 
 function main() {
