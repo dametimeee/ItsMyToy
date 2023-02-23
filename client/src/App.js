@@ -4,6 +4,7 @@ import Search from "./routes/Search/Search";
 import Join from "./routes/Join/Join";
 import Login from "./routes/Login/Login";
 import MyPage from "./routes/MyPage/MyPage";
+import Setting from "./routes/Setting/Setting";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { RecoilRoot } from "recoil";
@@ -13,6 +14,7 @@ function App() {
     <RecoilRoot>
       <Router>
         <Switch>
+          <Route path="/setting" component={Setting}></Route>
           <Route path="/MyPage" component={MyPage}></Route>
           <Route path="/Login" component={Login}></Route>
           <Route path="/Join" component={Join}></Route>
