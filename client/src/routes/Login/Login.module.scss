@@ -8,6 +8,8 @@
   .title {
     font-size: 20px;
     margin-bottom: 50px;
+    font-family: "Gloria Hallelujah", cursive;
+    color: #00d466;
   }
   .form {
     max-width: 400px;
@@ -38,21 +40,6 @@
         cursor: pointer;
       }
     }
-    .socialLogin {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 200px;
-      height: 100px;
-      cursor: pointer;
-      .naverLogin {
-        background-color: #17ce5f;
-      }
-      .kakaoLogin {
-        background-color: #fee501;
-      }
-    }
     .status {
       color: black;
     }
@@ -60,7 +47,19 @@
       display: flex;
       justify-content: space-between;
       color: black;
+      margin-top: 4px;
       font-size: 9px;
+    }
+    .socialLogin {
+      margin-top: 20px;
+      .naverLogin,
+      .kakaoLogin {
+        margin-right: 3px;
+        width: 30px;
+        height: 30px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
     }
   }
 }

@@ -1,6 +1,5 @@
 import styles from "./MyPage.module.scss";
 import Header from "../../components/Header/Header";
-import Home from "../Home/Home";
 import axios from "axios";
 import { useHistory, Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
@@ -18,6 +17,10 @@ function MyPage() {
     setUser(null);
     setIsLogin(false);
   };
+
+  const handleChangePassword = (req, res) => {
+    axios.post("/api/users/password/change").then((res) => {});
+  };
   return (
     <div>
       {isLogin ? (
@@ -25,13 +28,16 @@ function MyPage() {
           <Header></Header>
           <div className={styles.wrapper}>
             <div className={styles.profile}>
-              <div className={styles.image}>😄</div>
-              <div>
-                <span className={styles.content}>{user.username}</span>
-                <span className={styles.content}>설정</span>
-                <span className={styles.logout} onClick={handleLogoutClick}>
-                  로그아웃
-                </span>
+              <img
+                src={user.profileImage}
+                className={styles.profileImage}
+              ></img>
+              <div className={styles.content}>{user.username}</div>
+              <Link to="/setting" className={styles.content}>
+                비밀번호 변경
+              </Link>
+              <div className={styles.content} onClick={handleLogoutClick}>
+                로그아웃
               </div>
             </div>
           </div>

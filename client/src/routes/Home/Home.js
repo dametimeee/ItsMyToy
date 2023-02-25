@@ -18,6 +18,7 @@ function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [kakaoWebtoons, setKakaoWebtoons] = useState([]);
   const [naverWebtoons, setNaverWebtoons] = useState([]);
+  const [isWtData, setIsWtData] = useState(false);
   const [status, setStatus] = useState("");
   const [user, setUser] = useRecoilState(userState);
   const [isLogin, setIsLogin] = useRecoilState(loginState);
@@ -30,16 +31,19 @@ function Home() {
   }
 
   const getWebtoons = async () => {
-    const json = await (
-      await fetch(`https://korea-webtoon-api.herokuapp.com/?perPage=6000`)
-    ).json();
-    const webtoons = json.webtoons;
-    for (let webtoon of webtoons) {
-      if (webtoon.url.includes("kakao")) {
-        kakaoWebtoons.push(webtoon);
-      } else {
-        naverWebtoons.push(webtoon);
+    if (!isWtData) {
+      const json = await (
+        await fetch(`https://korea-webtoon-api.herokuapp.com/?perPage=6000`)
+      ).json();
+      const webtoons = json.webtoons;
+      for (let webtoon of webtoons) {
+        if (webtoon.url.includes("kakao")) {
+          kakaoWebtoons.push(webtoon);
+        } else {
+          naverWebtoons.push(webtoon);
+        }
       }
+      setIsWtData(true);
     }
     setIsLoading(false);
   };

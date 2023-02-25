@@ -11,12 +11,15 @@
     margin-left: 1.5vw;
     .header__title {
       text-decoration: none;
+      font-size: 23px;
+      font-family: "Gloria Hallelujah", cursive;
+      color: #00d466;
       &:hover {
         cursor: pointer;
       }
     }
     .header__icon__bar {
-      margin-right: 20px;
+      margin-right: 35px;
       cursor: pointer;
     }
   }
@@ -24,7 +27,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-right: 1.5vw;
+    margin-right: 2vw;
 
     .logo {
       width: 24px;
@@ -62,7 +65,13 @@
       .loginBox__image {
         font-size: 25px;
         margin-right: 30px;
+        .profileImage {
+          width: 35px;
+          height: 35px;
+          border-radius: 10px;
+        }
       }
+
       // .loginBox__username {
       //   font-size: 13px;
       // }

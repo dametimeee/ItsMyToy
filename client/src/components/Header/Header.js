@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import style from "./Header.module.scss";
+import styles from "./Header.module.scss";
 import { faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useHistory } from "react-router-dom";
@@ -35,7 +35,7 @@ function Header() {
     setIsNaver(true);
   };
 
-  const handleKakaoLogiClick = () => {
+  const handleKakaoLogoClick = () => {
     setIsNaver(false);
   };
 
@@ -49,34 +49,34 @@ function Header() {
 
   return (
     <div>
-      <div className={style.header__wrapper}>
-        <div className={style.header__left}>
+      <div className={styles.header__wrapper}>
+        <div className={styles.header__left}>
           <div>
             <FontAwesomeIcon
               icon={faBars}
               size={"xl"}
-              className={style.header__icon__bar}
+              className={styles.header__icon__bar}
               onClick={handleSearchClick}
             />
           </div>
           {sidebar ? <Sidebar /> : <></>}
-          <Link to="/" style={{ textDecoration: "none" }}>
-            <div className={style.header__title}>ThisIsTitle</div>
-          </Link>
+          <a href="/" className={styles.header__title}>
+            <div>Ibagu</div>
+          </a>
         </div>
-        <div className={style.header__right}>
+        <div className={styles.header__right}>
           <img
-            className={`${style.logo} ${style.kakao__logo}`}
+            className={`${styles.logo} ${styles.kakao__logo}`}
             src="https://i1.wp.com/wowtale.net/wp-content/uploads/2022/02/wowtale.net---1-1.jpg?zoom=2&fit=300%2C300&ssl=1"
             onClick={handleNaverLogoClick}
           ></img>
           <img
-            className={`${style.logo} ${style.naver__logo}`}
+            className={`${styles.logo} ${styles.naver__logo}`}
             src="https://play-lh.googleusercontent.com/41iW640PxKoS880AfgX55EQrzI7jO-SEkUt8tK-KUJrSn2f1784QoJZ8WSRpGmMsGcU"
-            onClick={handleKakaoLogiClick}
+            onClick={handleKakaoLogoClick}
           ></img>
           <div>
-            <div className={style.search__box}>
+            <div className={styles.search__box}>
               <input
                 id="searchLabel"
                 type="text"
@@ -96,7 +96,7 @@ function Header() {
                   <FontAwesomeIcon
                     icon={faMagnifyingGlass}
                     size={"1x"}
-                    style={{ fontSize: "15px" }}
+                    styles={{ fontSize: "15px" }}
                   />
                 </span>
               </Link>
@@ -105,26 +105,29 @@ function Header() {
 
           {isLogin ? (
             <div>
-              <div className={style.loginBox}>
+              <div className={styles.loginBox}>
                 <div
-                  className={style.loginBox__image}
+                  className={styles.loginBox__image}
                   onClick={handleProfileClick}
                 >
-                  😄
+                  <img
+                    src={user.profileImage}
+                    className={styles.profileImage}
+                  ></img>
                 </div>
                 {profile ? <Profile /> : <div></div>}
 
-                {/* <span className={style.loginBox__username}>
+                {/* <span className={styles.loginBox__username}>
                   {user.username}
                 </span> */}
               </div>
-              {/* <div className={style.loginBox} onClick={handleLogoutClick}>
+              {/* <div className={styles.loginBox} onClick={handleLogoutClick}>
                 로그아웃
               </div>  */}
             </div>
           ) : (
-            <Link to={"/Login"} style={{ textDecoration: "none" }}>
-              <div className={style.loginBox}>로그인</div>
+            <Link to={"/Login"} styles={{ textDecoration: "none" }}>
+              <div className={styles.loginBox}>로그인</div>
             </Link>
           )}
         </div>

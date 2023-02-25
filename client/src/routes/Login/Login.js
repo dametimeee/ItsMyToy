@@ -79,7 +79,7 @@ function Login() {
     <div>
       <Header />
       <div className={styles.wrapper}>
-        <div className={styles.title}>ThisIsTitle</div>
+        <div className={styles.title}>Ibagu</div>
         <form className={styles.form} onSubmit={handleSubmit}>
           <div>
             <input
@@ -106,14 +106,6 @@ function Login() {
             type="submit"
             required
           ></input>
-          <div className={styles.socialLogin}>
-            <div className={styles.naverLogin} onClick={handleNaverClick}>
-              네이버 로그인
-            </div>
-            <div className={styles.kakaoLogin} onClick={handleKakaoClick}>
-              카카오 로그인
-            </div>
-          </div>
           <div className={styles.bottom}>
             <div className={styles.bottom__left}>
               <span>아이디 찾기</span>
@@ -124,6 +116,19 @@ function Login() {
               <div className={styles.bottom__right}>회원가입</div>
             </Link>
           </div>
+          <div className={styles.socialLogin}>
+            <img
+              src="https://user-images.githubusercontent.com/106083871/218301864-9d0fa374-44aa-4ab2-8cfd-b74452e8b04b.png"
+              className={styles.naverLogin}
+              onClick={handleNaverClick}
+            ></img>
+            <img
+              src="https://t1.daumcdn.net/crms/symbol_img/symbol_%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1.png"
+              className={styles.kakaoLogin}
+              onClick={handleKakaoClick}
+            ></img>
+          </div>
+
           <div className={styles.status} onChange={handleStatusChange}>
             {status}
           </div>

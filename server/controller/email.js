@@ -1,7 +1,6 @@
 import nodemailer from "nodemailer";
 
-const sendEmail = async (authNum) => {
-  const num = authNum;
+const sendEmail = async (authNum, email) => {
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -16,9 +15,9 @@ const sendEmail = async (authNum) => {
   // setup email data with unicode symbols
   let mailOptions = {
     from: process.env.MY_EMAIL, // replace with your email
-    to: "as01100@naver.com", // replace with recipient email
+    to: `${email}`, // replace with recipient email
     subject: "인증번호",
-    text: `${num}`,
+    text: `${authNum}`,
   };
 
   // send mail with defined transport object

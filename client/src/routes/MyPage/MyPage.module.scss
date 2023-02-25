@@ -3,16 +3,19 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  margin-top: 15vh;
+  margin-top: 10vh;
   .profile {
     display: flex;
     flex-direction: column;
     align-items: center;
-    .image {
-      font-size: 100px;
-      margin-bottom: 60px;
+    .profileImage {
+      width: 100px;
+      border-radius: 10px;
+      margin-bottom: 20px;
     }
-    .logout {
+    .content {
+      font-size: 18px;
+      margin-bottom: 10px;
       cursor: pointer;
     }
   }

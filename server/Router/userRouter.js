@@ -11,6 +11,7 @@ import {
   getKakaoData,
   getSendEmail,
   checkAuthNum,
+  changePassword,
 } from "../controller/userController.js";
 
 const userRouter = express.Router();
@@ -26,5 +27,6 @@ userRouter.get("/naver/data", getNaverData);
 userRouter.get("/kakao/data", getKakaoData);
 userRouter.post("/email", getSendEmail);
 userRouter.post("/email/check", checkAuthNum);
+userRouter.post("/password/change", changePassword);
 
 export default userRouter;

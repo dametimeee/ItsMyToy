@@ -1,7 +1,7 @@
 import styles from "./Join.module.scss";
 import Header from "../../components/Header/Header";
 import axios from "axios";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 function Join() {
@@ -14,6 +14,7 @@ function Join() {
   const history = useHistory();
   const [reAuthNum, setReAuthNum] = useState(null);
   const [isAuthNum, setIsAuthNum] = useState(false);
+  const [resendAuthNum, setResendAuthNum] = useState(false);
 
   function handleUseHistory() {
     history.push("/");
@@ -53,6 +54,8 @@ function Join() {
     if (!email) {
       window.alert("이메일을 입력해주세요.");
     } else {
+      setResendAuthNum(true);
+
       let body = {
         email: email,
       };
@@ -88,7 +91,6 @@ function Join() {
           }
         )
         .then((res) => {
-          console.log(res);
           if (res.data == true) {
             setIsAuthNum(true);
           }
@@ -183,9 +185,15 @@ function Join() {
               onChange={handleEmail}
             ></input>
 
-            <div className={styles.emailCheckBtn} onClick={handleEmailCheck}>
-              인증번호받기
-            </div>
+            {!resendAuthNum ? (
+              <div className={styles.emailCheckBtn} onClick={handleEmailCheck}>
+                인증번호 발송
+              </div>
+            ) : (
+              <div className={styles.emailCheckBtn} onClick={handleEmailCheck}>
+                인증번호 재발송
+              </div>
+            )}
           </div>
 
           <div className={`${styles.emailWrapper} `}>
@@ -198,7 +206,7 @@ function Join() {
 
             <div>
               {isAuthNum ? (
-                <div className={styles.emailCheckBtn}>✅</div>
+                <div className={styles.emailCheckBtnOK}>✅</div>
               ) : (
                 <div
                   className={styles.emailCheckBtn}

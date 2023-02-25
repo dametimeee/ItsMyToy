@@ -50,7 +50,6 @@ export const postJoin = async (req, res) => {
     await User.create({
       id,
       password,
-      password2,
       email,
       username,
       profileImage:
@@ -75,6 +74,7 @@ export const postLogin = async (req, res) => {
   req.session.sessionId = req.session.id;
   req.session.loggedIn = true;
   req.session.user = user;
+
   res.send(req.session);
 };
 
@@ -131,6 +131,7 @@ export const finishNaverLogin = async (req, res) => {
         password: "",
         profileImage:
           "https://ssl.pstatic.net/static.post/image/im/img_default.gif",
+        socialOnly: true,
       });
     }
     req.session.sessionId = req.session.id;
@@ -195,12 +196,13 @@ export const finishKakaoLogin = async (req, res) => {
         password: "",
         profileImage:
           "https://ssl.pstatic.net/static.post/image/im/img_default.gif",
+        socialOnly: true,
       });
     }
     req.session.sessionId = req.session.id;
     req.session.loggedIn = true;
     req.session.user = user;
-    naverUser = req.session;
+    kakaoUser = req.session;
     return res.redirect("/");
   } else {
     return res.redirect("/login");
@@ -219,15 +221,41 @@ export const getLogout = async (req, res) => {
 };
 
 export const getSendEmail = async (req, res) => {
+  const { email } = req.body;
+
   authNum = generateRandomNum();
-  sendEmail(authNum);
+  sendEmail(authNum, email);
 };
 
 export const checkAuthNum = (req, res) => {
-  console.log(req.body);
   if (req.body.reAuthNum == authNum) {
     res.send(true);
   } else {
     res.send(false);
   }
+};
+
+export const changePassword = async (req, res) => {
+  if (req.session.socialOnly) {
+    return res.send("소셜 서비스 회원은 불가합니다.");
+  }
+  const { oldPassword, newPassword, newPasswordConfirmation } = req.body;
+
+  const { _id } = req.session.user;
+  const user = await User.findById(_id);
+  console.log(user.password);
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  console.log(ok);
+  if (!ok) {
+    return res.send("현재 비밀번호가 일치하지 않습니다.");
+  }
+
+  if (newPassword !== newPasswordConfirmation) {
+    return res.send("새로운 비밀번호와 비밀번호 확인을 일치시켜 주세요.");
+  }
+
+  user.password = newPassword;
+  await user.save();
+
+  return res.send("complete");
 };
